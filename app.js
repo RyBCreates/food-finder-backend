@@ -6,7 +6,7 @@ app.use(express.json());
 
 // Routes
 const index = require("./routes/index");
-app.use("/api/example", index);
+app.use("/food-finder/api", index);
 
 // Root route
 app.get("/", (req, res) => {
