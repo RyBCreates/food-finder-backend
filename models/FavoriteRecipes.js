@@ -29,7 +29,6 @@ const favoriteSchema = new mongoose.Schema({
   image: String,
   readyInMinutes: Number,
   pricePerServing: Number,
-  sourceUrl: String,
   extendedIngredients: [ingredientSchema],
   instructions: [instructionStepSchema],
 });
