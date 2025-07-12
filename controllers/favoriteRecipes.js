@@ -33,4 +33,21 @@ const addFavorite = async (req, res) => {
   }
 };
 
-module.exports = { addFavorite, getFavorites };
+// Delete a Favorite Recipe
+const deleteFavorite = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Favorite.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Favorite not found" });
+    }
+
+    res.status(200).json({ message: "Favorite deleted", id });
+  } catch (err) {
+    console.error("Error deleting favorite:", err);
+    res.status(500).json({ error: "Failed to delete favorite" });
+  }
+};
+
+module.exports = { addFavorite, getFavorites, deleteFavorite };
