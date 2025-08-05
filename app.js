@@ -1,6 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
 const app = express();
+
+app.use(cors());
+
 const PORT = process.env.PORT || 3002;
 
 const MONGODB_URI = "mongodb://127.0.0.1:27017/food-finder";
