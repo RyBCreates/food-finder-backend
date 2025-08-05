@@ -19,18 +19,22 @@ const instructionStepSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const favoriteSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
+const favoriteSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    title: { type: String, required: true },
+    image: { type: String, required: true },
+    recipeId: { type: Number, required: true },
+    readyInMinutes: { type: Number, required: true },
+    pricePerServing: { type: Number, required: true },
+    extendedIngredients: [ingredientSchema],
+    instructions: [instructionStepSchema],
   },
-  recipeId: Number,
-  title: String,
-  image: String,
-  readyInMinutes: Number,
-  pricePerServing: Number,
-  extendedIngredients: [ingredientSchema],
-  instructions: [instructionStepSchema],
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Favorite", favoriteSchema);
