@@ -25,12 +25,12 @@ const getUser = async (req, res, next) => {
 
 // UPDATE user info (name, avatar)
 const updateUser = async (req, res, next) => {
-  const { name, avatar } = req.body;
+  const { username, avatar } = req.body;
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { name, avatar },
+      { username, avatar },
       { new: true, runValidators: true }
     );
 
@@ -46,7 +46,7 @@ const updateUser = async (req, res, next) => {
 
 // REGISTER a new user
 const registerUser = async (req, res, next) => {
-  const { name, email, password, avatar } = req.body;
+  const { username, email, password, avatar } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -57,7 +57,7 @@ const registerUser = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
-      name,
+      username,
       email,
       password: hashedPassword,
       avatar,
@@ -65,7 +65,7 @@ const registerUser = async (req, res, next) => {
 
     res.status(201).json({
       _id: newUser._id,
-      name: newUser.name,
+      username: newUser.username,
       email: newUser.email,
       avatar: newUser.avatar,
     });

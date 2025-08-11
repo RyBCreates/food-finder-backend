@@ -12,7 +12,7 @@ const validateURL = (value, helpers) => {
 // Validate user signup
 const validateUserRegister = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30).messages({
+    username: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "name" field is 2',
       "string.max": 'The maximum length of the "name" field is 30',
       "string.empty": 'The "name" field must be filled in',
@@ -58,11 +58,11 @@ const validateUserUpdate = celebrate({
       "string.uri": 'The "avatar" field must be a valid URL',
       "any.required": 'The "avatar" field is required',
     }),
-    name: Joi.string().required().min(2).max(30).messages({
-      "string.min": 'The minimum length of the "name" field is 2',
-      "string.max": 'The maximum length of the "name" field is 30',
-      "string.empty": 'The "name" field must be filled in',
-      "any.required": 'The "name" field is required',
+    username: Joi.string().required().min(2).max(30).messages({
+      "string.min": 'The minimum length of the "username" field is 2',
+      "string.max": 'The maximum length of the "username" field is 30',
+      "string.empty": 'The "username" field must be filled in',
+      "any.required": 'The "username" field is required',
     }),
   }),
 });
