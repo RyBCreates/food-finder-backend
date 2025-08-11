@@ -1,6 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { registerUser, loginUser } = require("./controllers/user");
+const {
+  validateUserRegister,
+  validateUserLogin,
+} = require("./middlewares/validation");
 
 const app = express();
 
@@ -20,6 +25,9 @@ app.use(express.json());
 // Routes
 const index = require("./routes/index");
 app.use("/food-finder/api", index);
+
+app.post("/register", validateUserRegister, registerUser);
+app.post("/login", validateUserLogin, loginUser);
 
 // Root route
 app.get("/", (req, res) => {

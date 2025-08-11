@@ -1,18 +1,97 @@
-const { findById } = require("../models/FavoriteRecipes");
 const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../utils/config");
+const {
+  UnauthorizedError,
+  NotFoundError,
+  ConflictError,
+} = require("../utils/errors/errors");
 
-// GET a User
-const getUser = async (req, res) => {
-  const User = await findById(req.body);
-
+// GET user's info
+const getUser = async (req, res, next) => {
   try {
-    res.status(200).json(User);
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    res.status(200).json(user);
   } catch (err) {
-    console.error("Error fetching User info", err);
-    res.status(500).json({ error: "Failed to fetch User" });
+    next(err);
   }
 };
 
-// POST - Update a User's Info
+// UPDATE user info (name, avatar)
+const updateUser = async (req, res, next) => {
+  const { name, avatar } = req.body;
 
-module.exports = { getUser, updateUser };
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, avatar },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      throw new NotFoundError("User not found");
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// REGISTER a new user
+const registerUser = async (req, res, next) => {
+  const { name, email, password, avatar } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      throw new ConflictError("Email already registered");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      avatar,
+    });
+
+    res.status(201).json({
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      avatar: newUser.avatar,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Login existing user
+const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findUserByCredentials(email, password);
+
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
+
+    res.status(200).json({ token });
+  } catch (err) {
+    next(new UnauthorizedError("Incorrect email or password"));
+  }
+};
+
+module.exports = {
+  getUser,
+  updateUser,
+  registerUser,
+  loginUser,
+};
