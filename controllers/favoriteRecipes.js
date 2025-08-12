@@ -6,7 +6,7 @@ const transformSpoonacularRecipe = require("../utils/transformRecipeData");
 const getFavorites = async (req, res) => {
   try {
     // TODO: Replace with req.user.id when auth middleware is ready
-    const userId = req.query.userId || "user123";
+    const userId = req.user.id;
     const favorites = await Favorite.find({ userId });
     res.status(200).json(favorites);
   } catch (err) {

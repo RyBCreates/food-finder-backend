@@ -26,8 +26,8 @@ app.use(express.json());
 const index = require("./routes/index");
 app.use("/food-finder/api", index);
 
-app.post("/register", validateUserRegister, registerUser);
-app.post("/login", validateUserLogin, loginUser);
+app.post("/food-finder/api/register", validateUserRegister, registerUser);
+app.post("/food-finder/api/login", validateUserLogin, loginUser);
 
 // Root route
 app.get("/", (req, res) => {
