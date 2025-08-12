@@ -6,6 +6,7 @@ const {
   validateUserRegister,
   validateUserLogin,
 } = require("./middlewares/validation");
+const { errors } = require("celebrate");
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use("/food-finder/api", index);
 
 app.post("/food-finder/api/register", validateUserRegister, registerUser);
 app.post("/food-finder/api/login", validateUserLogin, loginUser);
+
+app.use(errors());
 
 // Root route
 app.get("/", (req, res) => {
