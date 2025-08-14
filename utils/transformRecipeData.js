@@ -8,6 +8,7 @@ function transformSpoonacularRecipe(apiRecipe, userId) {
     pricePerServing: apiRecipe.pricePerServing,
     rating: apiRecipe.spoonacularScore || null,
     sourceUrl: apiRecipe.sourceUrl,
+    aggregateLikes: apiRecipe.aggregateLikes,
 
     extendedIngredients:
       apiRecipe.extendedIngredients?.map((ingredient) => ({

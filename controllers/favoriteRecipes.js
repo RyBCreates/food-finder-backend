@@ -25,7 +25,6 @@ const addFavorite = async (req, res) => {
     }
 
     const favoriteData = transformSpoonacularRecipe(recipe, userId);
-
     const existing = await Favorite.findOne({ userId, recipeId: recipe.id });
     if (existing) {
       return res.status(409).json({ message: "Recipe already favorited" });

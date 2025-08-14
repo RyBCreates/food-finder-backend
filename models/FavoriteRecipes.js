@@ -33,6 +33,7 @@ const favoriteSchema = new mongoose.Schema(
     pricePerServing: { type: Number, required: true },
     extendedIngredients: [ingredientSchema],
     instructions: [instructionStepSchema],
+    aggregateLikes: { type: Number, required: true },
   },
   { timestamps: true }
 );
