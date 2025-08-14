@@ -5,8 +5,7 @@ const transformSpoonacularRecipe = require("../utils/transformRecipeData");
 
 const getFavorites = async (req, res) => {
   try {
-    // TODO: Replace with req.user.id when auth middleware is ready
-    const userId = req.user.id;
+    const userId = req.user._id;
     const favorites = await Favorite.find({ userId });
     res.status(200).json(favorites);
   } catch (err) {
@@ -18,7 +17,8 @@ const getFavorites = async (req, res) => {
 // Add Recipe to your favorites
 const addFavorite = async (req, res) => {
   try {
-    const { userId, recipe } = req.body;
+    const { recipe } = req.body;
+    const userId = req.user._id;
 
     if (!userId || !recipe || !recipe.id) {
       return res.status(400).json({ message: "Missing required data" });
