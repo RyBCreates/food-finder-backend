@@ -22,9 +22,11 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: false,
+    default: "",
     validate: {
       validator(value) {
-        return validator.isURL(value);
+        if (!value) return true;
+        return validator.isURL(value, { require_protocol: true });
       },
       message: "You must enter a valid URL",
     },

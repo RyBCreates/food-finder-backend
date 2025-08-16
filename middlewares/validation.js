@@ -18,11 +18,7 @@ const validateUserRegister = celebrate({
       "string.empty": 'The "name" field must be filled in',
       "any.required": 'The "name" field is required',
     }),
-    avatar: Joi.string().required().custom(validateURL).messages({
-      "string.empty": 'The "avatar" field must be filled in',
-      "string.uri": 'The "avatar" field must be a valid URL',
-      "any.required": 'The "avatar" field is required',
-    }),
+    avatar: Joi.string().uri().optional().allow("", null),
     email: Joi.string().required().email().messages({
       "string.empty": 'The "email" field must be filled in',
       "any.required": 'The "email" field is required',
@@ -53,11 +49,19 @@ const validateUserLogin = celebrate({
 // Validate user login
 const validateUserUpdate = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().custom(validateURL).messages({
-      "string.empty": 'The "avatar" field must be filled in',
-      "string.uri": 'The "avatar" field must be a valid URL',
-      "any.required": 'The "avatar" field is required',
-    }),
+    avatar: Joi.string()
+      .optional()
+      .allow("", null) // allow empty or null
+      .custom((value, helpers) => {
+        if (!value) return value; // skip validation if empty
+        if (!validator.isURL(value, { require_protocol: true })) {
+          return helpers.error("string.uri");
+        }
+        return value;
+      })
+      .messages({
+        "string.uri": 'The "avatar" field must be a valid URL',
+      }),
     username: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "username" field is 2',
       "string.max": 'The maximum length of the "username" field is 30',

@@ -60,7 +60,7 @@ const registerUser = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
-      avatar,
+      avatar: avatar || "",
     });
 
     res.status(201).json({
